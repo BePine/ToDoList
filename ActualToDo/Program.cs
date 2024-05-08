@@ -124,26 +124,34 @@
 //    return true;
 //}
 
+List<string> typicalList = new List<string> {"first", "second", "third" };
 bool statusOfTheApplication = true;
 string usersChoice;
-Console.WriteLine("\n[s]ee all todos");
-Console.WriteLine("[a]dd a todo");
-Console.WriteLine("[r]emove a todo");
-Console.WriteLine("[e]xit");
-usersChoice = Console.ReadLine();
+var firstList = new UsersToDoList(typicalList);
+
 do
 {
+    Console.WriteLine("\n[s]ee all todos");
+    Console.WriteLine("[a]dd a todo");
+    Console.WriteLine("[r]emove a todo");
+    Console.WriteLine("[e]xit");
+    usersChoice = Console.ReadLine();
+
     switch (usersChoice)
     {
         case "s":
         case "S":
-            break;
+            firstList.SeeToDo();
+            continue;
         case "a":
         case "A":
-            break;
+            Console.WriteLine("What is ToDo you want to add?");
+            string newToDo = Console.ReadLine();
+            firstList.AddToDo(newToDo);
+            continue;
         case "r":
         case "R":
-            break;
+            continue;
         case "e":
         case "E":
             statusOfTheApplication = false;
@@ -152,7 +160,28 @@ do
             Console.WriteLine("Please enter a valid value");
             break;
     }
+
 } while (statusOfTheApplication);
 
-
+class UsersToDoList 
+{
+    private List<string> _toDos = new List<string>();
+    public UsersToDoList(List<string> toDos)
+    {
+        _toDos = toDos;             
+    }
+    public void SeeToDo() 
+    {
+        for (int i = 0; i < _toDos.Count; i++) 
+        {
+            int currentToDoListNumber = i + 1;
+            Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
+        }
+    }
+    
+    public void AddToDo(string toDoToAdd)
+    {
+        _toDos.Add(toDoToAdd);
+    }
+}
 
