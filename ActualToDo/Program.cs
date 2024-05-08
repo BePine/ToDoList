@@ -124,7 +124,7 @@
 //    return true;
 //}
 
-List<string> typicalList = new List<string> {"first", "second", "third" };
+List<string> typicalList = new List<string> { "first", "second", "third" };
 bool statusOfTheApplication = true;
 string usersChoice;
 var firstList = new UsersToDoList(typicalList);
@@ -151,6 +151,10 @@ do
             continue;
         case "r":
         case "R":
+            firstList.SeeToDo();
+            Console.WriteLine("Which ToDo would you like to remove? Please type in a number from the ones above\n");
+            string toDoToRemove = Console.ReadLine();
+            firstList.RemoveToDo(toDoToRemove);
             continue;
         case "e":
         case "E":
@@ -163,25 +167,47 @@ do
 
 } while (statusOfTheApplication);
 
-class UsersToDoList 
+class UsersToDoList
 {
     private List<string> _toDos = new List<string>();
     public UsersToDoList(List<string> toDos)
     {
-        _toDos = toDos;             
+        _toDos = toDos;
     }
-    public void SeeToDo() 
+    public void SeeToDo()
     {
-        for (int i = 0; i < _toDos.Count; i++) 
+        for (int i = 0; i < _toDos.Count; i++)
         {
             int currentToDoListNumber = i + 1;
             Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
         }
     }
-    
+
     public void AddToDo(string toDoToAdd)
     {
         _toDos.Add(toDoToAdd);
+    }
+    public void RemoveToDo(string toDoToRemove)
+    {
+        int numberOfToDoToRemove = ParsingString(toDoToRemove);
+        if (numberOfToDoToRemove > 0 && numberOfToDoToRemove <= _toDos.Count)
+        {
+            _toDos.RemoveAt(numberOfToDoToRemove - 1);
+            
+        }
+        else
+        {
+            Console.WriteLine("insert correct input");
+        }
+
+    }
+    public int ParsingString(string givenStringToParse)
+    {
+        if (int.TryParse(givenStringToParse, out int result))
+        {
+            return result;
+        };
+        return -1;
     }
 }
 
