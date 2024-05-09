@@ -1,4 +1,5 @@
-﻿//bool appStatus = true;
+﻿#region previousApp
+//bool appStatus = true;
 //List<string> usersCurrentTodos = new List<string>();
 
 //do
@@ -123,7 +124,7 @@
 
 //    return true;
 //}
-
+#endregion
 List<string> typicalList = new List<string> { "first", "second", "third" };
 bool statusOfTheApplication = true;
 string usersChoice;
@@ -135,6 +136,7 @@ do
     Console.WriteLine("[a]dd a todo");
     Console.WriteLine("[r]emove a todo");
     Console.WriteLine("[e]xit");
+
     usersChoice = Console.ReadLine();
 
     switch (usersChoice)
@@ -170,22 +172,17 @@ do
 class UsersToDoList
 {
     private List<string> _toDos = new List<string>();
+
     public UsersToDoList(List<string> toDos)
     {
         _toDos = toDos;
     }
-    public void SeeToDo()
-    {
-        for (int i = 0; i < _toDos.Count; i++)
-        {
-            int currentToDoListNumber = i + 1;
-            Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
-        }
-    }
+
     class IsParsingSuccessAndItsResult
     {
         public bool IsParseSuccess { get; }
         public int ParsingOutputNumber { get; }
+
         public IsParsingSuccessAndItsResult(bool isParseSuccess, int parsingOutputNumber)
         {
             IsParseSuccess = isParseSuccess;
@@ -194,10 +191,26 @@ class UsersToDoList
 
     }
 
+    #region SeeToDo()
+    public void SeeToDo()
+    {
+        for (int i = 0; i < _toDos.Count; i++)
+        {
+            int currentToDoListNumber = i + 1;
+
+            Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
+        }
+    }
+    #endregion
+
+    #region AddToDo()
     public void AddToDo(string toDoToAdd)
     {
         _toDos.Add(toDoToAdd);
     }
+    #endregion
+
+    #region RemoveToDo()
     public void RemoveToDo(string toDoToRemove)
     {
         IsParsingSuccessAndItsResult parsingResults = ParsingString(toDoToRemove);
@@ -215,11 +228,15 @@ class UsersToDoList
         }
 
     }
+    #endregion
+
+    #region ParsingString()
     private IsParsingSuccessAndItsResult ParsingString(string givenStringToParse)
     {
             bool parsingBoolResult = int.TryParse(givenStringToParse,out int parsingOutputNumber);
             var methodResults = new IsParsingSuccessAndItsResult(parsingBoolResult, parsingOutputNumber);
+
             return methodResults;
     }
+    #endregion
 }
-
