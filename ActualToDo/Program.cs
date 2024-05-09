@@ -182,6 +182,17 @@ class UsersToDoList
             Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
         }
     }
+    class IsParsingSuccessAndItsResult
+    {
+        public bool IsParseSuccess { get; }
+        public int ParsingOutputNumber { get; }
+        public IsParsingSuccessAndItsResult(bool isParseSuccess, int parsingOutputNumber)
+        {
+            IsParseSuccess = isParseSuccess;
+            ParsingOutputNumber = parsingOutputNumber;
+        }
+
+    }
 
     public void AddToDo(string toDoToAdd)
     {
@@ -189,7 +200,10 @@ class UsersToDoList
     }
     public void RemoveToDo(string toDoToRemove)
     {
-        int numberOfToDoToRemove = ParsingString(toDoToRemove);
+        IsParsingSuccessAndItsResult parsingResults = ParsingString(toDoToRemove);
+        int numberOfToDoToRemove = parsingResults.ParsingOutputNumber;
+        bool isParsingSuccessful = parsingResults.IsParseSuccess;
+
         if (numberOfToDoToRemove > 0 && numberOfToDoToRemove <= _toDos.Count)
         {
             _toDos.RemoveAt(numberOfToDoToRemove - 1);
@@ -197,17 +211,15 @@ class UsersToDoList
         }
         else
         {
-            Console.WriteLine("insert correct input");
+            Console.WriteLine("insert correct number");
         }
 
     }
-    public int ParsingString(string givenStringToParse)
+    private IsParsingSuccessAndItsResult ParsingString(string givenStringToParse)
     {
-        if (int.TryParse(givenStringToParse, out int result))
-        {
-            return result;
-        };
-        return -1;
+            bool parsingBoolResult = int.TryParse(givenStringToParse,out int parsingOutputNumber);
+            var methodResults = new IsParsingSuccessAndItsResult(parsingBoolResult, parsingOutputNumber);
+            return methodResults;
     }
 }
 
