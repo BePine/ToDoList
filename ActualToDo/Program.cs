@@ -125,8 +125,6 @@
 //    return true;
 //}
 #endregion
-using System.ComponentModel;
-
 List<string> typicalList = new List<string> { "first", "second", "third" };
 bool statusOfTheApplication = true;
 string usersChoice;
@@ -137,9 +135,11 @@ do
     Console.WriteLine("\n[s]ee all todos");
     Console.WriteLine("[a]dd a todo");
     Console.WriteLine("[r]emove a todo");
-    Console.WriteLine("[e]xit");
+    Console.WriteLine("[e]xit\n");
 
     usersChoice = Console.ReadLine();
+    
+
 
     switch (usersChoice)
     {
@@ -150,7 +150,7 @@ do
 
         case "a":
         case "A":
-            Console.WriteLine("What is ToDo you want to add?");
+            Console.WriteLine("\nWhat is ToDo you want to add?");
             string newToDo = Console.ReadLine();
             firstList.AddToDo(newToDo);
             continue;
@@ -158,7 +158,7 @@ do
         case "r":
         case "R":
             firstList.SeeToDo();
-            Console.WriteLine("Which ToDo would you like to remove? Please type in a number from the ones above\n");
+            Console.WriteLine("\nWhich ToDo would you like to remove? Please type in a number from the ones above\n");
             string toDoToRemove = Console.ReadLine();
             firstList.RemoveToDo(toDoToRemove);
             continue;
@@ -169,7 +169,7 @@ do
             break;
 
         default:
-            Console.WriteLine("Please enter a valid value");
+            Console.WriteLine("\nPlease enter a valid value");
             break;
     }
 
@@ -198,18 +198,31 @@ class UsersToDoList
             ParsingOutputNumber = parsingOutputNumber;
         }
         #endregion
-        
+
     }
     // main application methods
     #region SeeToDo()
     public void SeeToDo()
     {
-        for (int i = 0; i < _toDos.Count; i++)
+        int seeToDoValidationResult = SeeToDoValidation();
+        switch (seeToDoValidationResult)
         {
-            int currentToDoListNumber = i + 1;
+            case 0:
+                Console.WriteLine("\nThe list is currently empty, add some to do's if you want to check them out!");
+                break;
 
-            Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
+            case 1:
+
+                for (int i = 0; i < _toDos.Count; i++)
+                {
+                    int currentToDoListNumber = i + 1;
+
+                    Console.WriteLine($"{currentToDoListNumber}. {_toDos[i]}");
+                }
+                break;
+
         }
+        
     }
     #endregion
 
@@ -217,10 +230,17 @@ class UsersToDoList
     public void AddToDo(string toDoToAdd)
     {
         int toDoToAddValidationResult = AddToDoValidation(toDoToAdd);
-        switch (toDoToAddValidationResult) 
+        switch (toDoToAddValidationResult)
         {
-            case 0: Console.WriteLine("Must insert a description!"); break;
-            case 1: _toDos.Add(toDoToAdd); break;
+            case 0: 
+                Console.WriteLine("\nMust insert a description!");
+                break;
+            case 1:
+                Console.WriteLine("\nTo do with this description already exists.");
+                break;
+            case 2: 
+                _toDos.Add(toDoToAdd);
+                break;
         }
     }
     #endregion
@@ -232,29 +252,43 @@ class UsersToDoList
         int numberOfToDoToRemove = parsingResults.ParsingOutputNumber;
         bool isParsingSuccessful = parsingResults.IsParseSuccess;
         int numberValidationResult = RemoveToDoValidation(numberOfToDoToRemove, isParsingSuccessful);
-        switch(numberValidationResult){
+        switch (numberValidationResult)
+        {
             case 0:
             case 2:
-            case 3:     
+            case 3:
                 break;
+
             case 1:
                 _toDos.RemoveAt(numberOfToDoToRemove - 1);
                 break;
-            
+
         }
 
     }
     #endregion
 
-    // helping methods
+    // helper methods
 
     #region ParsingString()
     private IsParsingSuccessAndItsResult ParsingString(string givenStringToParse)
     {
-            bool parsingBoolResult = int.TryParse(givenStringToParse,out int parsingOutputNumber);
-            var methodResults = new IsParsingSuccessAndItsResult(parsingBoolResult, parsingOutputNumber);
+        bool parsingBoolResult = int.TryParse(givenStringToParse, out int parsingOutputNumber);
+        var methodResults = new IsParsingSuccessAndItsResult(parsingBoolResult, parsingOutputNumber);
 
-            return methodResults;
+        return methodResults;
+    }
+    #endregion
+
+    #region SeeToDoValidation()
+    public int SeeToDoValidation()
+    {
+        if (_toDos.Count == 0)
+        {
+            return 0;
+
+        }
+        return 1;
     }
     #endregion
 
@@ -263,8 +297,9 @@ class UsersToDoList
     {
         if (_toDos.Count == 0)
         {
-            Console.WriteLine("The list is empty, cannot remove a to do!");
+            Console.WriteLine("\nThe list is empty, cannot remove a to do!");
             return 0;
+
         }
         else
         {
@@ -278,25 +313,33 @@ class UsersToDoList
                 }
                 else
                 {
-                    Console.WriteLine("Please, enter a valid number!");
+                    Console.WriteLine("\nPlease, enter a valid number!");
                     return 2;
 
                 }
             }
-                Console.WriteLine("Please, insert a number!");
-                return 3;
+            Console.WriteLine("\nPlease, insert a number!");
+            return 3;
 
 
         }
     }
     #endregion
+
     #region AddToDoValidation()
     public int AddToDoValidation(string toDoToAdd)
     {
-        if(toDoToAdd == ""){
+        if (toDoToAdd == "")
+        {
             return 0;
         }
-        return 1;
+        else if (_toDos.Contains(toDoToAdd))
+        {
+            return 1;
+
+        }
+        return 2;
+ 
     }
     #endregion
 
