@@ -125,6 +125,8 @@
 //    return true;
 //}
 #endregion
+using System.ComponentModel;
+
 List<string> typicalList = new List<string> { "first", "second", "third" };
 bool statusOfTheApplication = true;
 string usersChoice;
@@ -145,12 +147,14 @@ do
         case "S":
             firstList.SeeToDo();
             continue;
+
         case "a":
         case "A":
             Console.WriteLine("What is ToDo you want to add?");
             string newToDo = Console.ReadLine();
             firstList.AddToDo(newToDo);
             continue;
+
         case "r":
         case "R":
             firstList.SeeToDo();
@@ -158,10 +162,12 @@ do
             string toDoToRemove = Console.ReadLine();
             firstList.RemoveToDo(toDoToRemove);
             continue;
+
         case "e":
         case "E":
             statusOfTheApplication = false;
             break;
+
         default:
             Console.WriteLine("Please enter a valid value");
             break;
@@ -210,7 +216,12 @@ class UsersToDoList
     #region AddToDo()
     public void AddToDo(string toDoToAdd)
     {
-        _toDos.Add(toDoToAdd);
+        int toDoToAddValidationResult = AddToDoValidation(toDoToAdd);
+        switch (toDoToAddValidationResult) 
+        {
+            case 0: Console.WriteLine("Must insert a description!"); break;
+            case 1: _toDos.Add(toDoToAdd); break;
+        }
     }
     #endregion
 
@@ -220,7 +231,7 @@ class UsersToDoList
         IsParsingSuccessAndItsResult parsingResults = ParsingString(toDoToRemove);
         int numberOfToDoToRemove = parsingResults.ParsingOutputNumber;
         bool isParsingSuccessful = parsingResults.IsParseSuccess;
-        int numberValidationResult = removeToDoValidation(numberOfToDoToRemove, isParsingSuccessful);
+        int numberValidationResult = RemoveToDoValidation(numberOfToDoToRemove, isParsingSuccessful);
         switch(numberValidationResult){
             case 0:
             case 2:
@@ -247,8 +258,8 @@ class UsersToDoList
     }
     #endregion
 
-    #region removeToDoValidation()
-    public int removeToDoValidation(int numberOfToDoToRemove, bool isParsingSuccessful)
+    #region RemoveToDoValidation()
+    public int RemoveToDoValidation(int numberOfToDoToRemove, bool isParsingSuccessful)
     {
         if (_toDos.Count == 0)
         {
@@ -277,6 +288,15 @@ class UsersToDoList
 
 
         }
+    }
+    #endregion
+    #region AddToDoValidation()
+    public int AddToDoValidation(string toDoToAdd)
+    {
+        if(toDoToAdd == ""){
+            return 0;
+        }
+        return 1;
     }
     #endregion
 
