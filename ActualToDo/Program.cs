@@ -194,7 +194,7 @@ class UsersToDoList
         #endregion
         
     }
-
+    // main application methods
     #region SeeToDo()
     public void SeeToDo()
     {
@@ -220,19 +220,22 @@ class UsersToDoList
         IsParsingSuccessAndItsResult parsingResults = ParsingString(toDoToRemove);
         int numberOfToDoToRemove = parsingResults.ParsingOutputNumber;
         bool isParsingSuccessful = parsingResults.IsParseSuccess;
-
-        if (numberOfToDoToRemove > 0 && numberOfToDoToRemove <= _toDos.Count)
-        {
-            _toDos.RemoveAt(numberOfToDoToRemove - 1);
+        int numberValidationResult = removeToDoValidation(numberOfToDoToRemove, isParsingSuccessful);
+        switch(numberValidationResult){
+            case 0:
+            case 2:
+            case 3:     
+                break;
+            case 1:
+                _toDos.RemoveAt(numberOfToDoToRemove - 1);
+                break;
             
-        }
-        else
-        {
-            Console.WriteLine("insert correct number");
         }
 
     }
     #endregion
+
+    // helping methods
 
     #region ParsingString()
     private IsParsingSuccessAndItsResult ParsingString(string givenStringToParse)
@@ -243,4 +246,38 @@ class UsersToDoList
             return methodResults;
     }
     #endregion
+
+    #region removeToDoValidation()
+    public int removeToDoValidation(int numberOfToDoToRemove, bool isParsingSuccessful)
+    {
+        if (_toDos.Count == 0)
+        {
+            Console.WriteLine("The list is empty, cannot remove a to do!");
+            return 0;
+        }
+        else
+        {
+            if (isParsingSuccessful)
+            {
+
+                if (numberOfToDoToRemove > 0 && numberOfToDoToRemove <= _toDos.Count)
+                {
+                    return 1;
+
+                }
+                else
+                {
+                    Console.WriteLine("Please, enter a valid number!");
+                    return 2;
+
+                }
+            }
+                Console.WriteLine("Please, insert a number!");
+                return 3;
+
+
+        }
+    }
+    #endregion
+
 }
