@@ -173,22 +173,26 @@ class UsersToDoList
 {
     private List<string> _toDos = new List<string>();
 
+    #region UsersToDoList(List<string> toDos)
     public UsersToDoList(List<string> toDos)
     {
         _toDos = toDos;
     }
+    #endregion
 
     class IsParsingSuccessAndItsResult
     {
         public bool IsParseSuccess { get; }
         public int ParsingOutputNumber { get; }
 
+        #region IsParsingSuccessAndItsResult(bool isParseSuccess, int parsingOutputNumber)
         public IsParsingSuccessAndItsResult(bool isParseSuccess, int parsingOutputNumber)
         {
             IsParseSuccess = isParseSuccess;
             ParsingOutputNumber = parsingOutputNumber;
         }
-
+        #endregion
+        
     }
 
     #region SeeToDo()
